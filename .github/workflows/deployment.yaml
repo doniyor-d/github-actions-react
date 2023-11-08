@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - master
-    paths-ignore:
-      - '.github/workflows/*'
+    # paths-ignore:
+    #   - '.github/workflows/*'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -21,6 +21,11 @@ jobs:
     steps:
       - name: Get the repository code
         uses: actions/checkout@v4
+      - name: Cache deps
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependecies
         run: npm ci
       - name: Lint application
